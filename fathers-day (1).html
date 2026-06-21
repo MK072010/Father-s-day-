@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Happy Father's Day ❤️ — A Tribute</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,500;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Dancing+Script:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#07060a',
+          ink2: '#0d0a08',
+          gold: { DEFAULT:'#d4af37', light:'#f3dfa0', soft:'#b8924f', deep:'#8a6b22' },
+          cream: '#f3ead9',
+          muted: '#9b8f74'
+        },
+        fontFamily: {
+          display: ['"Playfair Display"','serif'],
+          body: ['"Lora"','serif'],
+          hand: ['"Dancing Script"','cursive'],
+          label: ['"Jost"','sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- AOS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+<style>
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; background:#07060a; }
+  body.no-scroll{ overflow:hidden; height:100vh; }
+  body{
+    background:#07060a; color:#f3ead9; font-family:'Lora',serif;
+    cursor: default;
+  }
+  ::selection{ background:#d4af37; color:#07060a; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-track{ background:#07060a; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(#d4af37,#8a6b22); border-radius:4px; }
+
+  .font-display{ font-family:'Playfair Display',serif; }
+  .font-body{ font-family:'Lora',serif; }
+  .font-hand{ font-family:'Dancing Script',cursive; }
+  .font-label{ font-family:'Jost',sans-serif; }
+
+  .eyebrow{
+    font-family:'Jost',sans-serif; letter-spacing:.35em; text-transform:uppercase;
+    font-size:.7rem; color:#c9a86a; margin-bottom:.9rem;
+  }
+
+  /* ---------- intro ---------- */
+  #intro-overlay{
+    position:fixed; inset:0; z-index:200; background:#050403;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:1.5rem;
+    transition:opacity 1.4s ease;
+  }
+  #intro-overlay.fade-out{ opacity:0; pointer-events:none; }
+  .intro-line{
+    font-family:'Playfair Display',serif; font-style:italic; font-weight:500;
+    font-size:clamp(1.4rem,4.5vw,2.6rem); color:#f3ead9;
+    opacity:0; transform:translateY(16px); transition:opacity 1.3s ease, transform 1.3s ease;
+    position:absolute; max-width:90vw;
+  }
+  .intro-line.show{ opacity:1; transform:translateY(0); }
+
+  /* ---------- bg canvas + overlay ---------- */
+  #bg-canvas{ position:fixed; inset:0; z-index:0; }
+  .scene-overlay{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.07), transparent 55%),
+      rgba(5,4,3,var(--overlay-a,0.72));
+    transition: background-color .8s ease;
+  }
+
+  /* ---------- cursor glow ---------- */
+  #cursor-glow{
+    position:fixed; top:0; left:0; width:26px; height:26px; border-radius:9999px;
+    background:radial-gradient(circle, rgba(212,175,55,.9), rgba(212,175,55,0) 70%);
+    filter:blur(2px); pointer-events:none; z-index:150; mix-blend-mode:screen;
+    transform:translate(-50%,-50%);
+  }
+
+  /* ---------- progress bar ---------- */
+  #progress-bar{
+    position:fixed; top:0; left:0; height:3px; width:0%; z-index:160;
+    background:linear-gradient(90deg,#8a6b22,#d4af37,#f3dfa0);
+    box-shadow:0 0 12px rgba(212,175,55,.6);
+  }
+
+  /* ---------- nav dots ---------- */
+  #nav-dots{ position:fixed; right:1.5rem; top:50%; transform:translateY(-50%); z-index:140; display:none; flex-direction:column; gap:1rem; }
+  @media(min-width:1024px){ #nav-dots{ display:flex; } }
+  .nav-dot{
+    width:9px; height:9px; border-radius:9999px; border:1px solid rgba(212,175,55,.6);
+    background:transparent; cursor:pointer; transition:all .4s ease; position:relative;
+  }
+  .nav-dot.active{ background:#d4af37; box-shadow:0 0 10px rgba(212,175,55,.8); transform:scale(1.3); }
+  .nav-dot span{
+    position:absolute; right:140%; top:50%; transform:translateY(-50%);
+    font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+    color:#f3dfa0; white-space:nowrap; opacity:0; transition:opacity .3s ease; pointer-events:none;
+  }
+  .nav-dot:hover span{ opacity:1; }
+
+  /* ---------- buttons ---------- */
+  .gold-btn{
+    position:relative; font-family:'Jost',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    font-size:.8rem; padding:1rem 2.4rem; border:1px solid #d4af37; color:#f3dfa0;
+    background:transparent; border-radius:999px; overflow:hidden; transition:all .5s ease;
+    box-shadow:0 0 0 0 rgba(212,175,55,.5);
+    animation:btn-pulse 2.8s ease-in-out infinite;
+  }
+  .gold-btn:hover{ background:#d4af37; color:#07060a; box-shadow:0 0 30px rgba(212,175,55,.55); }
+  @keyframes btn-pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(212,175,55,.35); }
+    50%{ box-shadow:0 0 0 10px rgba(212,175,55,0); }
+  }
+
+  /* ---------- hero ---------- */
+  .hero-title{
+    font-family:'Playfair Display',serif; font-weight:700;
+    font-size:clamp(2.6rem,8vw,6rem); line-height:1.05;
+  }
+  .shimmer-text{
+    background:linear-gradient(100deg,#b8924f 20%,#f3dfa0 40%,#d4af37 55%,#b8924f 75%);
+    background-size:250% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:shimmer 5s linear infinite;
+  }
+  @keyframes shimmer{ to{ background-position:-250% center; } }
+
+  .scroll-cue{
+    position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%);
+    font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.3em; text-transform:uppercase;
+    color:#9b8f74; display:flex; flex-direction:column; align-items:center; gap:.5rem;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(#d4af37,transparent); animation:scrollline 1.8s ease-in-out infinite; }
+  @keyframes scrollline{ 0%{ transform:scaleY(0); transform-origin:top; } 50%{ transform:scaleY(1); transform-origin:top; } 50.01%{ transform-origin:bottom; } 100%{ transform:scaleY(0); transform-origin:bottom; } }
+
+  /* ---------- reveal / typed message ---------- */
+  #reveal{ opacity:0; pointer-events:none; transition:opacity 1.6s ease; }
+  #reveal.is-visible{ opacity:1; pointer-events:auto; }
+  #typed-message{ min-height:8rem; }
+  #typed-message::after{
+    content:'|'; color:#d4af37; animation:blink 1s step-start infinite; margin-left:2px;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- timeline ---------- */
+  .timeline-line{
+    position:absolute; top:0; bottom:0; width:2px;
+    background:linear-gradient(to bottom, transparent, #8a6b22 8%, #d4af37 50%, #8a6b22 92%, transparent);
+    left:1.4rem;
+  }
+  @media(min-width:768px){ .timeline-line{ left:50%; transform:translateX(-50%); } }
+  .timeline-dot{
+    width:14px; height:14px; border-radius:9999px; background:#07060a; border:2px solid #d4af37;
+    box-shadow:0 0 14px rgba(212,175,55,.6); position:relative; z-index:2; flex-shrink:0;
+  }
+  .timeline-card{
+    background:linear-gradient(160deg, rgba(212,175,55,.06), rgba(212,175,55,0));
+    border:1px solid rgba(212,175,55,.18); border-radius:1rem; padding:1.5rem 1.7rem;
+    backdrop-filter:blur(6px);
+  }
+
+  /* ---------- polaroid gallery ---------- */
+  .polaroid{
+    background:#f3ead9; padding:.8rem .8rem 2.4rem .8rem; border-radius:.2rem;
+    box-shadow:0 18px 30px -10px rgba(0,0,0,.55);
+    transition:transform .5s ease, box-shadow .5s ease;
+  }
+  .polaroid:hover{ transform:translateY(-10px) rotate(0deg) scale(1.04) !important; box-shadow:0 26px 40px -10px rgba(212,175,55,.35); z-index:5; }
+  .polaroid-photo{
+    aspect-ratio:1/1; background:#07060a; display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden; border:1px dashed rgba(212,175,55,.5);
+  }
+  .polaroid-img{ width:100%; height:100%; object-fit:cover; cursor:zoom-in; }
+  .polaroid-caption{
+    font-family:'Dancing Script',cursive; font-size:1.25rem; color:#3a2f1d; text-align:center;
+    margin-top:.6rem; outline:none; border-bottom:1px dashed transparent;
+  }
+  .polaroid-caption:focus{ border-color:#b8924f; }
+
+  /* ---------- counters ---------- */
+  .counter-card{
+    opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease;
+  }
+  .counter-card.in-view{ opacity:1; transform:translateY(0); }
+  .counter-value{
+    font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.6rem);
+    background:linear-gradient(100deg,#b8924f,#f3dfa0,#d4af37); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* ---------- letter ---------- */
+  .letter-wrap{ perspective:1800px; }
+  .letter-paper{
+    background:
+      repeating-linear-gradient(transparent, transparent 33px, rgba(184,146,79,.18) 34px),
+      #f7f0df;
+    color:#3a2f1d; border-radius:.3rem; box-shadow:0 30px 60px -15px rgba(0,0,0,.6);
+    transform-style:preserve-3d; transform-origin:top center;
+    position:relative;
+  }
+  .letter-paper::before{
+    content:''; position:absolute; inset:0; border-radius:.3rem;
+    box-shadow:inset 0 0 0 1px rgba(184,146,79,.25);
+    pointer-events:none;
+  }
+  .wax-seal{
+    width:46px; height:46px; border-radius:9999px; background:radial-gradient(circle at 35% 30%, #e3b94a, #8a6b22);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(0,0,0,.4);
+    font-size:1.1rem;
+  }
+
+  /* ---------- appreciation marquee ---------- */
+  .marquee-mask{ overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+  .marquee-row{ display:flex; gap:1.2rem; width:max-content; animation:marquee-left 32s linear infinite; }
+  .marquee-row.reverse{ animation:marquee-right 36s linear infinite; }
+  .marquee-row:hover{ animation-play-state:paused; }
+  @keyframes marquee-left{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @keyframes marquee-right{ from{ transform:translateX(-50%); } to{ transform:translateX(0); } }
+  .appreciation-card{
+    font-family:'Playfair Display',serif; font-style:italic; font-size:1.05rem; color:#f3dfa0;
+    border:1px solid rgba(212,175,55,.25); border-radius:.9rem; padding:1.4rem 1.7rem; white-space:nowrap;
+    background:linear-gradient(160deg, rgba(212,175,55,.08), transparent);
+  }
+
+  /* ---------- surprise ---------- */
+  #surprise-message{
+    position:fixed; inset:0; z-index:170; background:rgba(5,4,3,.88);
+    display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+    transition:opacity .6s ease; flex-direction:column; gap:1.5rem; text-align:center; padding:1.5rem;
+  }
+  #surprise-message.show{ opacity:1; pointer-events:auto; }
+  .surprise-title{
+    font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(2rem,6vw,4rem);
+    color:#f3dfa0; text-shadow:0 0 40px rgba(212,175,55,.7);
+    animation:glowpulse 2s ease-in-out infinite;
+  }
+  @keyframes glowpulse{ 0%,100%{ text-shadow:0 0 20px rgba(212,175,55,.5);} 50%{ text-shadow:0 0 50px rgba(212,175,55,.95);} }
+
+  /* ---------- footer ---------- */
+  .footer-glow{
+    font-family:'Playfair Display',serif; font-style:italic; font-weight:600;
+    font-size:clamp(1.3rem,3vw,2rem); color:#f3dfa0; text-shadow:0 0 25px rgba(212,175,55,.45);
+    animation:flicker 4s ease-in-out infinite;
+  }
+  @keyframes flicker{ 0%,100%{ opacity:1;} 48%{ opacity:1;} 50%{ opacity:.82;} 52%{ opacity:1;} }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  @media(hover:none){ #cursor-glow{ display:none; } }
+</style>
+</head>
+<body class="no-scroll">
+
+<!-- ============ CINEMATIC INTRO ============ -->
+<div id="intro-overlay">
+  <p id="intro-line1" class="intro-line">Some heroes don't wear capes&hellip;</p>
+  <p id="intro-line2" class="intro-line">They are called Fathers.</p>
+</div>
+
+<!-- ============ AMBIENT 3D BACKGROUND ============ -->
+<canvas id="bg-canvas"></canvas>
+<div class="scene-overlay"></div>
+<div id="cursor-glow"></div>
+<div id="progress-bar"></div>
+
+<!-- ============ SIDE NAV ============ -->
+<nav id="nav-dots">
+  <a href="#hero" class="nav-dot active" data-target="#hero"><span>Home</span></a>
+  <a href="#reveal" class="nav-dot" data-target="#reveal"><span>Message</span></a>
+  <a href="#timeline" class="nav-dot" data-target="#timeline"><span>Journey</span></a>
+  <a href="#gallery" class="nav-dot" data-target="#gallery"><span>Memories</span></a>
+  <a href="#counters" class="nav-dot" data-target="#counters"><span>Forever</span></a>
+  <a href="#heartscene" class="nav-dot" data-target="#heartscene"><span>Golden Light</span></a>
+  <a href="#letter" class="nav-dot" data-target="#letter"><span>Letter</span></a>
+  <a href="#wall" class="nav-dot" data-target="#wall"><span>Gratitude</span></a>
+  <a href="#surprise" class="nav-dot" data-target="#surprise"><span>Surprise</span></a>
+</nav>
+
+<!-- ============ MUTE TOGGLE ============ -->
+<button id="mute-btn" class="hidden fixed bottom-6 right-6 z-[140] w-11 h-11 rounded-full border border-gold/50 bg-ink/70 backdrop-blur flex items-center justify-center text-lg hover:border-gold transition">🔊</button>
+
+<main class="relative z-10">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
+    <p class="eyebrow" data-aos="fade-down" data-aos-delay="200">A Tribute, With Love</p>
+    <h1 class="hero-title mb-6" data-aos="fade-up" data-aos-delay="350">
+      Happy <span class="shimmer-text">Father's Day</span> ❤️
+    </h1>
+    <p class="font-body italic text-cream/80 max-w-xl text-base md:text-lg mb-12 leading-relaxed" data-aos="fade-up" data-aos-delay="550">
+      "A father is someone who sacrifices his happiness for his children's dreams."
+    </p>
+    <button id="open-message-btn" class="gold-btn" data-aos="fade-up" data-aos-delay="750">Open My Message</button>
+
+    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  </section>
+
+  <!-- ============ EMOTIONAL REVEAL ============ -->
+  <section id="reveal" class="reveal-section min-h-screen flex items-center justify-center px-6 py-32">
+    <div class="max-w-2xl text-center">
+      <p class="eyebrow">From My Heart To Yours</p>
+      <p id="typed-message" class="font-hand text-2xl md:text-4xl leading-relaxed text-gold-light"></p>
+    </div>
+  </section>
+
+  <!-- ============ MEMORY TIMELINE ============ -->
+  <section id="timeline" class="relative px-6 py-28 md:py-36 max-w-5xl mx-auto">
+    <div class="text-center mb-20" data-aos="fade-up">
+      <p class="eyebrow">Every Stage, You Were There</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold">Our Journey Together</h2>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-line"></div>
+
+      <div class="space-y-12 md:space-y-0">
+
+        <div class="timeline-card md:w-[44%] md:ml-0 ml-12 relative md:mb-16" data-aos="fade-right">
+          <div class="absolute md:right-[-3.15rem] left-[-2.85rem] md:left-auto top-6 timeline-dot flex items-center justify-center text-sm">👶</div>
+          <p class="eyebrow !mb-2">Childhood · The Beginning</p>
+          <h3 class="font-display text-xl mb-2 text-gold-light">Held In Your Arms</h3>
+          <p class="text-cream/75 text-sm leading-relaxed">Before I could walk, your hands were my whole world — steady, warm, and always there to catch me.</p>
+        </div>
+
+        <div class="timeline-card md:w-[44%] md:ml-auto ml-12 relative md:mb-16" data-aos="fade-left">
+          <div class="absolute md:left-[-3.15rem] left-[-2.85rem] top-6 timeline-dot flex items-center justify-center text-sm">📚</div>
+          <p class="eyebrow !mb-2">School Life · Growing Up</p>
+          <h3 class="font-display text-xl mb-2 text-gold-light">Books, Bags &amp; Belief</h3>
+          <p class="text-cream/75 text-sm leading-relaxed">You packed my bag with books, and quietly packed my heart with confidence I didn't know I had.</p>
+        </div>
+
+        <div class="timeline-card md:w-[44%] md:ml-0 ml-12 relative md:mb-16" data-aos="fade-right">
+          <div class="absolute md:right-[-3.15rem] left-[-2.85rem] md:left-auto top-6 timeline-dot flex items-center justify-center text-sm">🎓</div>
+          <p class="eyebrow !mb-2">Career Dreams · Finding My Path</p>
+          <h3 class="font-display text-xl mb-2 text-gold-light">You Believed First</h3>
+          <p class="text-cream/75 text-sm leading-relaxed">You believed in my dreams long before I had the courage to say them out loud.</p>
+        </div>
+
+        <div class="timeline-card md:w-[44%] md:ml-auto ml-12 relative md:mb-16" data-aos="fade-left">
+          <div class="absolute md:left-[-3.15rem] left-[-2.85rem] top-6 timeline-dot flex items-center justify-center text-sm">❤️</div>
+          <p class="eyebrow !mb-2">Family Support · Always There</p>
+          <h3 class="font-display text-xl mb-2 text-gold-light">Every Storm, Smaller</h3>
+          <p class="text-cream/75 text-sm leading-relaxed">Every storm felt smaller standing next to you. Every fall felt safer knowing you'd help me up.</p>
+        </div>
+
+        <div class="timeline-card md:w-[44%] md:ml-0 ml-12 relative" data-aos="fade-right">
+          <div class="absolute md:right-[-3.15rem] left-[-2.85rem] md:left-auto top-6 timeline-dot flex items-center justify-center text-sm">🏆</div>
+          <p class="eyebrow !mb-2">Today · Now</p>
+          <h3 class="font-display text-xl mb-2 text-gold-light">Everything I Am</h3>
+          <p class="text-cream/75 text-sm leading-relaxed">Everything I am today is a quiet reflection of everything you gave, without ever asking for anything back.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHOTO GALLERY ============ -->
+  <section id="gallery" class="px-6 py-28 md:py-36 max-w-6xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <p class="eyebrow">A Few Frames, A Lifetime Of Love</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold mb-4">Our Memories</h2>
+      <p class="text-muted text-sm">Tap a frame to add your own photo &middot; tap a caption to edit it</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 place-items-center">
+      <!-- polaroid template x6 -->
+      <div class="polaroid w-full max-w-[230px]" style="transform:rotate(-4deg)" data-aos="zoom-in" data-aos-delay="0">
+        <label class="polaroid-photo cursor-pointer">
+          <img src="g1.jpg" alt="memory photo">
+          <input type="file" accept="image/*" class="polaroid-input hidden">
+        </label>
+        <p class="polaroid-caption" contenteditable="true" spellcheck="false">First Steps</p>
+      </div>
+
+      <div class="polaroid w-full max-w-[230px]" style="transform:rotate(3deg)" data-aos="zoom-in" data-aos-delay="100">
+        <label class="polaroid-photo cursor-pointer">
+          <img src="g2.jpg" alt="memory photo">
+          <input type="file" accept="image/*" class="polaroid-input hidden">
+        </label>
+        <p class="polaroid-caption" contenteditable="true" spellcheck="false">papa ji</p>
+      </div>
+
+      <div class="polaroid w-full max-w-[230px]" style="transform:rotate(-2deg)" data-aos="zoom-in" data-aos-delay="200">
+        <label class="polaroid-photo cursor-pointer">
+        <img src="g3.jpg" alt="memory photo">
+          <input type="file" accept="image/*" class="polaroid-input hidden">
+        </label>
+        <p class="polaroid-caption" contenteditable="true" spellcheck="false">my hero</p>
+      </div>
+
+      <div class="polaroid w-full max-w-[230px]" style="transform:rotate(2deg)" data-aos="zoom-in" data-aos-delay="0">
+        <label class="polaroid-photo cursor-pointer">
+   <img src="g4.jpg" alt="memory photo">
+          <input type="file" accept="image/*" class="polaroid-input hidden">
+        </label>
+        <p class="polaroid-caption" contenteditable="true" spellcheck="false">graduation</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ EMOTIONAL COUNTERS ============ -->
+  <section id="counters" class="px-6 py-28 md:py-36 max-w-5xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <p class="eyebrow">Some Things Can't Be Measured</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold">Yet We Try Anyway</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+      <div class="counter-card text-center border border-gold/20 rounded-xl py-10 px-4" data-final="Infinite" style="transition-delay:.05s">
+        <div class="text-3xl mb-3">❤️</div>
+        <div class="counter-value">&infin;</div>
+        <p class="font-label text-xs tracking-[.2em] uppercase text-muted mt-3">Love</p>
+      </div>
+      <div class="counter-card text-center border border-gold/20 rounded-xl py-10 px-4" data-final="Unlimited" style="transition-delay:.2s">
+        <div class="text-3xl mb-3">🤝</div>
+        <div class="counter-value scramble">Unlimited</div>
+        <p class="font-label text-xs tracking-[.2em] uppercase text-muted mt-3">Support</p>
+      </div>
+      <div class="counter-card text-center border border-gold/20 rounded-xl py-10 px-4" data-final="Countless" style="transition-delay:.35s">
+        <div class="text-3xl mb-3">💪</div>
+        <div class="counter-value scramble">Countless</div>
+        <p class="font-label text-xs tracking-[.2em] uppercase text-muted mt-3">Sacrifices</p>
+      </div>
+      <div class="counter-card text-center border border-gold/20 rounded-xl py-10 px-4" data-final="Forever" style="transition-delay:.5s">
+        <div class="text-3xl mb-3">✨</div>
+        <div class="counter-value scramble">Forever</div>
+        <p class="font-label text-xs tracking-[.2em] uppercase text-muted mt-3">Inspiration</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3D HEART SCENE FOCUS ============ -->
+  <section id="heartscene" class="relative min-h-[80vh] flex items-center justify-center px-6 text-center">
+    <div data-aos="fade-up">
+      <p class="eyebrow">Floating In Golden Light</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold max-w-2xl mx-auto leading-snug">
+        Like golden light, your love quietly surrounds everything I do.
+      </h2>
+    </div>
+  </section>
+
+  <!-- ============ LETTER ============ -->
+  <section id="letter" class="px-6 py-28 md:py-36 max-w-2xl mx-auto">
+    <div class="text-center mb-14" data-aos="fade-up">
+      <p class="eyebrow">A Letter I Never Said Out Loud</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold">For You, Papa</h2>
+    </div>
+
+    <div class="letter-wrap">
+      <div class="letter-paper opacity-0 p-8 md:p-14">
+        <p class="font-hand text-2xl md:text-3xl leading-relaxed">
+          <span class="letter-line block mb-4">Dear Papa,</span>
+          <span class="letter-line block mb-4">Thank you for every sacrifice, every lesson, every smile,</span>
+          <span class="letter-line block mb-4">and every dream you helped me achieve.</span>
+        </p>
+        <div class="flex items-center justify-between mt-10">
+          <span class="letter-line font-hand text-2xl">— Your Loving Son</span>
+          <span class="letter-line wax-seal">❤</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APPRECIATION WALL ============ -->
+  <section id="wall" class="py-28 md:py-36">
+    <div class="text-center mb-14 px-6" data-aos="fade-up">
+      <p class="eyebrow">Words That Don't Say Enough</p>
+      <h2 class="font-display text-3xl md:text-5xl font-semibold">An Appreciation Wall</h2>
+    </div>
+
+    <div class="marquee-mask mb-6">
+      <div class="marquee-row">
+        <div class="appreciation-card">"Thank you for believing in me."</div>
+        <div class="appreciation-card">"You are my first hero."</div>
+        <div class="appreciation-card">"Thank you for every sacrifice."</div>
+        <div class="appreciation-card">"You taught me to be brave."</div>
+        <div class="appreciation-card">"Your strength became my strength."</div>
+        <!-- duplicate for seamless loop -->
+        <div class="appreciation-card">"Thank you for believing in me."</div>
+        <div class="appreciation-card">"You are my first hero."</div>
+        <div class="appreciation-card">"Thank you for every sacrifice."</div>
+        <div class="appreciation-card">"You taught me to be brave."</div>
+        <div class="appreciation-card">"Your strength became my strength."</div>
+      </div>
+    </div>
+
+    <div class="marquee-mask">
+      <div class="marquee-row reverse">
+        <div class="appreciation-card">"You are my safe place."</div>
+        <div class="appreciation-card">"Thank you for every late night."</div>
+        <div class="appreciation-card">"You showed me how to love."</div>
+        <div class="appreciation-card">"Every lesson stayed with me."</div>
+        <div class="appreciation-card">"Forever grateful for you."</div>
+        <!-- duplicate for seamless loop -->
+        <div class="appreciation-card">"You are my safe place."</div>
+        <div class="appreciation-card">"Thank you for every late night."</div>
+        <div class="appreciation-card">"You showed me how to love."</div>
+        <div class="appreciation-card">"Every lesson stayed with me."</div>
+        <div class="appreciation-card">"Forever grateful for you."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SURPRISE ============ -->
+  <section id="surprise" class="px-6 py-32 md:py-44 text-center max-w-2xl mx-auto">
+    <p class="eyebrow" data-aos="fade-up">One Last Thing</p>
+    <h2 class="font-display text-3xl md:text-5xl font-semibold mb-10" data-aos="fade-up" data-aos-delay="100">Before You Go&hellip;</h2>
+    <button id="surprise-btn" class="gold-btn" data-aos="zoom-in" data-aos-delay="200">🎁 Special Surprise</button>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="px-6 py-16 text-center border-t border-gold/15">
+    <p class="footer-glow mb-3">Made with ❤️ for the Greatest Father</p>
+    <p class="font-label text-xs tracking-[.2em] uppercase text-muted">Happy Father's Day</p>
+  </footer>
+
+</main>
+
+<!-- ============ LIGHTBOX ============ -->
+<div id="lightbox" class="hidden fixed inset-0 z-[180] bg-black/90 items-center justify-center px-6">
+  <button id="lightbox-close" class="absolute top-6 right-6 text-cream/70 hover:text-gold text-2xl leading-none">&times;</button>
+  <img id="lightbox-img" class="max-h-[85vh] max-w-full rounded shadow-2xl" alt="memory preview">
+</div>
+
+<!-- ============ SURPRISE MESSAGE OVERLAY ============ -->
+<div id="surprise-message">
+  <button id="surprise-close" class="absolute top-6 right-6 text-cream/70 hover:text-gold text-2xl leading-none">&times;</button>
+  <p class="surprise-title">World's Best Father 🏆</p>
+  <p class="font-body italic text-cream/80">Today, and always.</p>
+</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ================= INTRO SEQUENCE ================= */
+  window.addEventListener('load', function(){
+    var overlay = document.getElementById('intro-overlay');
+    var l1 = document.getElementById('intro-line1');
+    var l2 = document.getElementById('intro-line2');
+    var t = reduceMotion ? 300 : 1;
+
+    setTimeout(function(){ l1.classList.add('show'); }, reduceMotion ? 100 : 300);
+    setTimeout(function(){ l1.classList.remove('show'); }, reduceMotion ? 600 : 2400);
+    setTimeout(function(){ l2.classList.add('show'); }, reduceMotion ? 700 : 2800);
+    setTimeout(function(){
+      l2.classList.remove('show');
+      overlay.classList.add('fade-out');
+      document.body.classList.remove('no-scroll');
+    }, reduceMotion ? 1200 : 4900);
+    setTimeout(function(){ if(overlay && overlay.parentNode){ overlay.parentNode.removeChild(overlay); } }, reduceMotion ? 1800 : 5900);
+  });
+
+  /* ================= AOS ================= */
+  if (window.AOS) { AOS.init({ duration: 900, once: true, easing: 'ease-out-cubic', offset: 60 }); }
+
+  /* ================= GSAP / SCROLLTRIGGER ================= */
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    var letterTl = gsap.timeline({
+      scrollTrigger: { trigger: '#letter', start: 'top 70%' }
+    });
+    letterTl.fromTo('.letter-paper',
+      { rotateX: -100, opacity: 0 },
+      { rotateX: 0, opacity: 1, duration: 1.3, ease: 'power3.out' }
+    ).from('.letter-line', { opacity: 0, y: 12, stagger: 0.08, duration: 0.6 }, '-=0.5');
+  }
+
+  /* ================= SCROLL PROGRESS ================= */
+  var progressBar = document.getElementById('progress-bar');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var height = h.scrollHeight - h.clientHeight;
+    var pct = height > 0 ? (scrolled / height) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ================= NAV DOTS ================= */
+  var navDots = Array.prototype.slice.call(document.querySelectorAll('.nav-dot'));
+  var navSections = navDots.map(function(d){ return document.querySelector(d.getAttribute('data-target')); });
+  navDots.forEach(function(dot){
+    dot.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = document.querySelector(dot.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  });
+  var navObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        var idx = navSections.indexOf(entry.target);
+        navDots.forEach(function(d){ d.classList.remove('active'); });
+        if (idx > -1) navDots[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+  navSections.forEach(function(s){ if (s) navObserver.observe(s); });
+
+  /* ================= CURSOR GLOW ================= */
+  var cursor = document.getElementById('cursor-glow');
+  var cx = window.innerWidth / 2, cy = window.innerHeight / 2, tx = cx, ty = cy;
+  window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; });
+  function animCursor(){
+    cx += (tx - cx) * 0.18;
+    cy += (ty - cy) * 0.18;
+    cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(animCursor);
+  }
+  if (!reduceMotion) animCursor();
+
+  /* ================= HEART SCENE FOCUS DIM ================= */
+  var heartSection = document.getElementById('heartscene');
+  if (heartSection) {
+    var heartObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        document.body.style.setProperty('--overlay-a', entry.isIntersecting ? '0.32' : '0.72');
+      });
+    }, { threshold: 0.4 });
+    heartObserver.observe(heartSection);
+  }
+
+  /* ================= THREE.JS BACKGROUND ================= */
+  (function initScene(){
+    var canvas = document.getElementById('bg-canvas');
+    if (!window.THREE || !canvas) return;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 14;
+
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var ambient = new THREE.AmbientLight(0xd4af37, 0.6);
+    scene.add(ambient);
+    var point = new THREE.PointLight(0xf3dfa0, 1.2, 50);
+    point.position.set(5, 5, 10);
+    scene.add(point);
+
+    /* heart shape */
+    function heartShape(){
+      var s = new THREE.Shape();
+      var x = 0, y = 0;
+      s.moveTo(x, y);
+      s.bezierCurveTo(x, y - 0.6, x - 1.2, y - 0.6, x - 1.2, y + 0.5);
+      s.bezierCurveTo(x - 1.2, y + 1.1, x - 0.6, y + 1.5, x, y + 2);
+      s.bezierCurveTo(x + 0.6, y + 1.5, x + 1.2, y + 1.1, x + 1.2, y + 0.5);
+      s.bezierCurveTo(x + 1.2, y - 0.6, x, y - 0.6, x, y);
+      return s;
+    }
+
+    var heartGeo = new THREE.ExtrudeGeometry(heartShape(), { depth: 0.35, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, curveSegments: 12 });
+    heartGeo.center();
+    var heartMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.65, roughness: 0.28, emissive: 0x6b5316, emissiveIntensity: 0.4 });
+
+    var hearts = [];
+    var heartCount = window.innerWidth < 640 ? 8 : 14;
+    for (var i = 0; i < heartCount; i++) {
+      var mesh = new THREE.Mesh(heartGeo, heartMat);
+      var scale = 0.25 + Math.random() * 0.35;
+      mesh.scale.set(scale, scale, scale);
+      mesh.rotation.z = Math.PI;
+      mesh.rotation.y = Math.random() * Math.PI;
+      mesh.position.set((Math.random() - 0.5) * 16, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8 - 2);
+      mesh.userData = { speed: 0.4 + Math.random() * 0.6, offset: Math.random() * Math.PI * 2, baseY: mesh.position.y, rotSpeed: (Math.random() - 0.5) * 0.005 };
+      scene.add(mesh);
+      hearts.push(mesh);
+    }
+
+    /* gold dust particles */
+    var particleCount = window.innerWidth < 640 ? 150 : 320;
+    var positions = new Float32Array(particleCount * 3);
+    for (var p = 0; p < particleCount; p++) {
+      positions[p * 3] = (Math.random() - 0.5) * 26;
+      positions[p * 3 + 1] = (Math.random() - 0.5) * 16;
+      positions[p * 3 + 2] = (Math.random() - 0.5) * 14 - 3;
+    }
+    var particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    var particleMat = new THREE.PointsMaterial({ color: 0xf3dfa0, size: 0.045, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
+    var particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    var mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', function(e){
+      mouseX = (e.clientX / window.innerWidth - 0.5);
+      mouseY = (e.clientY / window.innerHeight - 0.5);
+    });
+
+    window.addEventListener('resize', function(){
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    var clock = new THREE.Clock();
+    function renderFrame(){
+      var t = clock.getElapsedTime();
+      hearts.forEach(function(h){
+        h.position.y = h.userData.baseY + Math.sin(t * h.userData.speed + h.userData.offset) * 0.6;
+        h.rotation.y += h.userData.rotSpeed * 4;
+      });
+      particles.rotation.y = t * 0.015;
+
+      camera.position.x += (mouseX * 2 - camera.position.x) * 0.03;
+      camera.position.y += (-mouseY * 1.4 - camera.position.y) * 0.03;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+      if (!reduceMotion) requestAnimationFrame(renderFrame);
+    }
+
+    if (reduceMotion) {
+      renderer.render(scene, camera);
+    } else {
+      requestAnimationFrame(renderFrame);
+    }
+  })();
+
+  /* ================= AUDIO (ambient piano pad) ================= */
+  var audioCtx, masterGain, audioOn = false, noteTimer;
+  var notes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33];
+
+  function initAudio(){
+    try{
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.0001;
+      masterGain.connect(audioCtx.destination);
+    } catch(e){ audioCtx = null; }
+  }
+
+  function playNote(freq){
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    var osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = freq;
+    var osc2 = audioCtx.createOscillator(); osc2.type = 'triangle'; osc2.frequency.value = freq * 2;
+    var gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.045, t + 1.3);
+    gain.gain.linearRampToValueAtTime(0, t + 4.6);
+    osc.connect(gain); osc2.connect(gain); gain.connect(masterGain);
+    osc.start(t); osc2.start(t); osc.stop(t + 4.7); osc2.stop(t + 4.7);
+  }
+
+  function startAmbientMusic(){
+    if (!audioCtx) initAudio();
+    if (!audioCtx) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    masterGain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 1.2);
+    playNote(notes[Math.floor(Math.random() * notes.length)]);
+    clearInterval(noteTimer);
+    noteTimer = setInterval(function(){
+      playNote(notes[Math.floor(Math.random() * notes.length)]);
+    }, 2600);
+    audioOn = true;
+    var mb = document.getElementById('mute-btn');
+    mb.classList.remove('hidden');
+    mb.textContent = '🔊';
+  }
+
+  document.getElementById('mute-btn').addEventListener('click', function(){
+    if (!audioCtx) return;
+    if (audioOn) {
+      masterGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+      audioOn = false;
+      this.textContent = '🔇';
+    } else {
+      masterGain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 0.5);
+      audioOn = true;
+      this.textContent = '🔊';
+    }
+  });
+
+  /* ================= OPEN MESSAGE / TYPEWRITER ================= */
+  var typed = false;
+  function typeMessage(){
+    if (typed) return;
+    typed = true;
+    var el = document.getElementById('typed-message');
+    var text = "Papa, Aapne mujhe chalna sikhaya, girne par uthna sikhaya, aur kabhi haar na maanna sikhaya. Aaj jo bhi hoon, aapki wajah se hoon. Happy Father's Day \u2764\ufe0f";
+    if (reduceMotion) { el.textContent = text; return; }
+    var i = 0;
+    function step(){
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(step, 38);
+      }
+    }
+    step();
+  }
+
+  document.getElementById('open-message-btn').addEventListener('click', function(){
+    var reveal = document.getElementById('reveal');
+    reveal.classList.add('is-visible');
+    reveal.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+    startAmbientMusic();
+    setTimeout(typeMessage, reduceMotion ? 0 : 900);
+  });
+
+  /* ================= GALLERY UPLOAD + LIGHTBOX ================= */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('.polaroid-input').forEach(function(input){
+    input.addEventListener('change', function(e){
+      var file = e.target.files[0];
+      if (!file) return;
+      var url = URL.createObjectURL(file);
+      var card = input.closest('.polaroid');
+      var img = card.querySelector('.polaroid-img');
+      var placeholder = card.querySelector('.polaroid-placeholder');
+      img.src = url;
+      img.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll('.polaroid-img').forEach(function(img){
+    img.addEventListener('click', function(e){
+      e.preventDefault();
+      if (!img.src) return;
+      lightboxImg.src = img.src;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+    });
+  });
+
+  function closeLightbox(){ lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); }
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){ if (e.target === lightbox) closeLightbox(); });
+
+  /* ================= COUNTER SCRAMBLE REVEAL ================= */
+  function scrambleReveal(el, finalText, duration){
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var totalFrames = Math.floor(duration / 32);
+    var frame = 0;
+    var interval = setInterval(function(){
+      frame++;
+      var out = '';
+      for (var i = 0; i < finalText.length; i++) {
+        if (finalText[i] === ' ') { out += ' '; continue; }
+        if (i < (finalText.length * frame / totalFrames)) out += finalText[i];
+        else out += chars[Math.floor(Math.random() * chars.length)];
+      }
+      el.textContent = out;
+      if (frame >= totalFrames) { el.textContent = finalText; clearInterval(interval); }
+    }, 32);
+  }
+
+  var counterCards = Array.prototype.slice.call(document.querySelectorAll('.counter-card'));
+  var counterObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        var scrambleEl = entry.target.querySelector('.scramble');
+        if (scrambleEl && !scrambleEl.dataset.done) {
+          scrambleEl.dataset.done = '1';
+          var idx = counterCards.indexOf(entry.target);
+          setTimeout(function(){
+            scrambleReveal(scrambleEl, entry.target.getAttribute('data-final'), reduceMotion ? 1 : 900);
+          }, idx * 150);
+        }
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  counterCards.forEach(function(c){ counterObserver.observe(c); });
+
+  /* ================= SURPRISE BUTTON ================= */
+  function triggerSurprise(){
+    if (window.confetti) {
+      var end = Date.now() + 2600;
+      (function frame(){
+        confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#d4af37', '#f3dfa0', '#ffffff'] });
+        confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#d4af37', '#f3dfa0', '#ffffff'] });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#d4af37', '#f3dfa0', '#ffffff'] });
+
+      var fwCount = 0;
+      var fwInterval = setInterval(function(){
+        confetti({ particleCount: 60, startVelocity: 32, spread: 360, origin: { x: Math.random(), y: Math.random() * 0.5 }, colors: ['#d4af37', '#f3dfa0', '#ffb703'] });
+        fwCount++;
+        if (fwCount > 5) clearInterval(fwInterval);
+      }, 420);
+    }
+
+    var msg = document.getElementById('surprise-message');
+    msg.classList.remove('hidden');
+    requestAnimationFrame(function(){ msg.classList.add('show'); });
+  }
+
+  document.getElementById('surprise-btn').addEventListener('click', triggerSurprise);
+  document.getElementById('surprise-close').addEventListener('click', function(){
+    document.getElementById('surprise-message').classList.remove('show');
+  });
+
+})();
+</script>
+</body>
+</html>
